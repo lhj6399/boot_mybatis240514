@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{layout :: setFragment(~{this::content})}">
+    <th:block th:fragment="content">
+        <div class="mt-4 p-5 rounded" th:with="auth=${authentication.getPrincipal()}"></div>
+        <h1>Member List Page</h1>
+        <div class="row">
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                    <img src="/image/pic.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <div class="my-3">
+                            <label for="email">Email: </label>
+                            <input type="email" class="form-control" id="email" name="email" th:value="${auto.mvo.email}" readonly>
+                        </div>
+                        <div class="my-3">
+                            <label for="pwd">Password </label>
+                            <input type="password" class="form-control" id="pwd"  placeholder="Enter Password" name="pwd">
+                        </div>
+                        <a th:href="@{/member/modify}" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</th:block>

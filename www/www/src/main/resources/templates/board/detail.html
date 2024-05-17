@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="~{layout :: setFragment(~{this::content})}">
     <th:block th:fragment="content">
+        <th:block th:with="bvo=${bdto.bvo}">
         <div class="container-sm">
             <h1>Board Detail Page</h1>
             <form action="/board/modify" method="post" id="modForm">
@@ -30,6 +31,25 @@
                               class="form-control" readonly>[[${bvo.content}]]
                     </textarea>
                 </div>
+                <!-- 파일 출력 라인 -->
+                <div class="mb-3">
+                    <ul class="list-group list-group-flush">
+                        <li th:each="fvo : ${bdto.flist}" class="list-group-item">
+                            <div th:if="${fvo.fileType > 0}" class="ms-2 me-auto">
+                                <img th:src="@{|/upload/${fvo.saveDir}/${fvo.uuid}_th_${fvo.fileName}|}">
+                            </div>
+                            <div th:unless="${fvo.fileType > 0}" class="ms-2 me-auto">
+                                <!-- 파일모양 아이콘 -->
+                            </div>
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">[[${fvo.fileName}]]</div>
+                                [[${fvo.regAt}]]
+                            </div>
+                            <span class="badge bg-dark rounded-pill">[[${fvo.fileSize}]]Bytes</span>
+                        </li>
+                    </ul>
+                </div>
+
                 <button type="button" id="listBtn" class="btn btn-outline-primary">List</button>
                 <!-- detail page에서 modify 상태로 변경하기 위한 버튼-->
                 <button type="button" id="modBtn"  class="btn btn-outline-warning">Modify</button>
@@ -39,7 +59,62 @@
                 <input type="hidden" name="bno" th:value="${bvo.bno}">
 
             </form>
+
+            <!-- Comment Line -->
+            <!-- post -->
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="cmtWriter">Anonymous</span>
+                <input type="text" id="cmtText" class="form-control" placeholder="Add Comment..." aria-label="Username" aria-describedby="basic-addon1">
+                <button type="button" id="cmtAddBtn" class="btn btn-secondary">Post</button>
+            </div>
+
+            <!-- spred -->
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            cno, writer, reg_date
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <strong>댓글 내용 표시</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 댓글 더보기 버튼 -->
+            <div>
+                <button type="button" id="moreBtn" data-page="1" class="btn btn-dark" style="visibility:hidden">More + </button>
+            </div>
+
+            <!-- 모달창 라인 -->
+            <div class="modal" id="myModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" class="form-control" id="cmtTextMod">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="cmtModBtn">modify</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script th:inline="javascript">
+                const bnoVal = [[${bvo.bno}]]
+                console.log(bnoVal);
+            </script>
+            <script th:src="@{/js/boardDetail.js}"></script>
+            <script th:src="@{/js/boardComment.js}"></script>
         </div>
-        <script th:src="@{/js/boardDetail.js}"></script>
+        </th:block>
     </th:block>
 </th:block>
